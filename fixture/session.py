@@ -5,7 +5,7 @@ class SessionHelper:
 
     def login(self, login, password):
         wd = self.app.wd
-        self.app.go_to_home_page("http://localhost/addressbook/")
+        self.app.open_home_page("http://localhost/addressbook/")
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(login)
         wd.find_element_by_name("pass").click()

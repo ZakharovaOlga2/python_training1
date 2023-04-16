@@ -14,14 +14,11 @@ class TestAddContactPy(unittest.TestCase):
 
     def test_add_contact_py(self):
         wd = self.wd
-        self.go_to_home_page(wd, "http://localhost/addressbook/")
+        self.open_home_page(wd, "http://localhost/addressbook/")
         self.login(wd, login="admin", password="secret")
         self.add_new_contact(wd, Contact(firstname="Ivan", middlename="Фролович", lastname="Petrov", nickname="Vano", title="Petrov Ivan", company="ISU", address="Москва" ,home="Питер", mobile="900000000", work="isu", email="a@a.ru", email2="a@a.ru", homepage="ISU.ru", bday="16", bmonth="September", byear="1980"))
         self.logout(wd)
 
-
-    def go_to_home_page(self, wd, url):
-        wd.get(url)
 
     def login(self, wd, login, password):
         wd.find_element_by_name("user").clear()
