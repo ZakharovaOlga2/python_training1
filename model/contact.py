@@ -16,5 +16,3 @@ class Contact:
         self.bday = bday
         self.bmonth = bmonth
         self.byear = byear
-        self.nickname = nickname
-        self.nickname = nickname

@@ -1,3 +1,6 @@
+from selenium.common.exceptions import ElementNotInteractableException
+
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -71,7 +74,58 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_link_text("home page").click()
 
+    def modify(self, search_filter, contact):
+        wd = self.app.wd
+        self.header_menu_navigation("home")
+        # filter
+        wd.find_element_by_name("searchstring").click()
+        wd.find_element_by_name("searchstring").send_keys(search_filter)
+        # edit instance or exit (if there are no results)
+        try:
+            wd.find_element_by_xpath("//img[@title='Edit']").click()
+        except ElementNotInteractableException:
+            self.header_menu_navigation("home")
+            return
+        # init first name
+        wd.find_element_by_name("firstname").click()
+        wd.find_element_by_name("firstname").clear()
+        wd.find_element_by_name("firstname").send_keys(contact.firstname)
+        # init middle name
+        wd.find_element_by_name("middlename").click()
+        wd.find_element_by_name("middlename").clear()
+        wd.find_element_by_name("middlename").send_keys(contact.middlename)
+        # init last name
+        wd.find_element_by_name("lastname").click()
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").send_keys(contact.lastname)
+        # save form
+        wd.find_element_by_name("update").click()
+        wd.find_element_by_link_text("home page").click()
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        self.header_menu_navigation("home")
+        # select first group
+        wd.find_element_by_name("selected[]").click()
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        # return
+        alert = wd.switch_to_alert()
+        alert.accept()
+
     def header_menu_navigation(self, item):
         wd = self.app.wd
         wd.find_element_by_link_text(item).click()
+
+    def close_alert_and_get_its_text(self):
+        try:
+            alert = self.driver.switch_to_alert()
+            alert_text = alert.text
+            if self.accept_next_alert:
+                alert.accept()
+            else:
+                alert.dismiss()
+            return alert_text
+        finally:
+            self.accept_next_alert = True
 
