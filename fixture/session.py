@@ -20,7 +20,6 @@ class SessionHelper:
         wd.find_element_by_name("user").send_keys("admin")
 
     def ensure_logout(self):
-        wd = self.app.wd
         if self.is_logged_in():
             self.logout()
 
