@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -41,6 +43,24 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_link_text("home page").click()
 
+    def exists(self, search_filter):
+        wd = self.app.wd
+        self.header_menu_navigation("home")
+        # filter
+        wd.find_element_by_name("searchstring").click()
+        wd.find_element_by_name("searchstring").send_keys(search_filter)
+        # count visible filtered values
+        cnt_all = len(wd.find_elements_by_xpath("//img[@title='Edit']"))
+        cnt_invisible = len(wd.find_elements_by_xpath("//tr[contains(@style,'display: none')]//img[@title='Edit']"))
+        cnt_visible = cnt_all - cnt_invisible
+        wd.find_element_by_name("searchstring").click()
+        wd.find_element_by_name("searchstring").clear()
+        wd.find_element_by_name("searchstring").send_keys(Keys.RETURN)
+        if cnt_visible > 0:
+            return True
+        return False
+
+
     def modify(self, search_filter, contact):
         wd = self.app.wd
         self.header_menu_navigation("home")
@@ -83,4 +103,9 @@ class ContactHelper:
             return alert_text
         finally:
             self.accept_next_alert = True
+
+    def count(self):
+        wd = self.app.wd
+        self.header_menu_navigation("home")
+        return len(wd.find_elements_by_name("selected[]"))
 

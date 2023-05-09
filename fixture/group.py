@@ -55,3 +55,16 @@ class GroupHelper:
     def header_menu_navigation(self, item):
         wd = self.app.wd
         wd.find_element_by_link_text(item).click()
+
+    def count(self):
+        wd = self.app.wd
+        self.header_menu_navigation("groups")
+        return len(wd.find_elements_by_name("selected[]"))
+
+    def exists(self, search_filter):
+        wd = self.app.wd
+        self.header_menu_navigation("groups")
+        # count
+        if len(wd.find_elements_by_xpath(f"//input[@type='checkbox' and @title='Select ({search_filter})']")) > 0:
+            return True
+        return False
