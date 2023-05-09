@@ -53,6 +53,7 @@ class ContactHelper:
         cnt_all = len(wd.find_elements_by_xpath("//img[@title='Edit']"))
         cnt_invisible = len(wd.find_elements_by_xpath("//tr[contains(@style,'display: none')]//img[@title='Edit']"))
         cnt_visible = cnt_all - cnt_invisible
+        # clear filter to next works
         wd.find_element_by_name("searchstring").click()
         wd.find_element_by_name("searchstring").clear()
         wd.find_element_by_name("searchstring").send_keys(Keys.RETURN)
