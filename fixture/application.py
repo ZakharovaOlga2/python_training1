@@ -11,12 +11,14 @@ class Application:
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
+
     def is_valid(self):
         try:
             self.wd.current_url
             return True
         except:
             return False
+
     def open_home_page(self, url):
         wd = self.wd
         wd.get(url)
