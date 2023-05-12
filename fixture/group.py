@@ -15,12 +15,14 @@ class GroupHelper:
         self.header_menu_navigation("groups")
         # add new group
         wd.find_element_by_name("new").click()
-        # fill group
-        self.type_group_property("group_name",group.name)
-        self.type_group_property("group_header", group.header)
-        self.type_group_property("group_footer", group.footer)
+        self.fill_group_info(group)
         wd.find_element_by_name("submit").click()
         self.return_to_elements_page("group page")
+
+    def fill_group_info(self, group):
+        self.type_group_property("group_name", group.name)
+        self.type_group_property("group_header", group.header)
+        self.type_group_property("group_footer", group.footer)
 
     def delete_first_group(self):
         wd = self.app.wd
@@ -38,10 +40,7 @@ class GroupHelper:
         # edit instance or exit (if there are no results)
         wd.find_element_by_xpath(f"//input[@type='checkbox' and @title='Select ({search_filter})']").click()
         wd.find_element_by_name("edit").click()
-        # fill group
-        self.type_group_property("group_name", group.name)
-        self.type_group_property("group_header", group.header)
-        self.type_group_property("group_footer", group.footer)
+        self.fill_group_info(group)
         # submit
         wd.find_element_by_name("update").click()
         self.return_to_elements_page("group page")

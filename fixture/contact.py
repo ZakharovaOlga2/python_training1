@@ -21,23 +21,7 @@ class ContactHelper:
     def create(self, contact):
         wd = self.app.wd
         self.header_menu_navigation("add new")
-        # init first name
-        self.type_contract_property("firstname", contact.firstname)
-        self.type_contract_property("middlename", contact.middlename)
-        self.type_contract_property("lastname", contact.lastname)
-        self.type_contract_property("nickname", contact.nickname)
-        self.type_contract_property("title", contact.title)
-        self.type_contract_property("company", contact.company)
-        self.type_contract_property("address", contact.address)
-        self.type_contract_property("home", contact.home)
-        self.type_contract_property("mobile", contact.mobile)
-        self.type_contract_property("work", contact.work)
-        self.type_contract_property("email", contact.email)
-        self.type_contract_property("email2", contact.email2)
-        self.type_contract_property("homepage", contact.homepage)
-        self.type_contract_dropdown("bday", contact.bday)
-        self.type_contract_dropdown("bmonth", contact.bmonth)
-        self.type_contract_property("byear", contact.byear)
+        self.fill_contact_info(contact)
         # save form
         wd.find_element_by_name("theform").click()
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
@@ -61,6 +45,23 @@ class ContactHelper:
             return True
         return False
 
+    def fill_contact_info(self, contact):
+        self.type_contract_property("firstname", contact.firstname)
+        self.type_contract_property("middlename", contact.middlename)
+        self.type_contract_property("lastname", contact.lastname)
+        self.type_contract_property("nickname", contact.nickname)
+        self.type_contract_property("title", contact.title)
+        self.type_contract_property("company", contact.company)
+        self.type_contract_property("address", contact.address)
+        self.type_contract_property("home", contact.home)
+        self.type_contract_property("mobile", contact.mobile)
+        self.type_contract_property("work", contact.work)
+        self.type_contract_property("email", contact.email)
+        self.type_contract_property("email2", contact.email2)
+        self.type_contract_property("homepage", contact.homepage)
+        self.type_contract_dropdown("bday", contact.bday)
+        self.type_contract_dropdown("bmonth", contact.bmonth)
+        self.type_contract_property("byear", contact.byear)
 
     def modify(self, search_filter, contact):
         wd = self.app.wd
@@ -70,10 +71,7 @@ class ContactHelper:
         wd.find_element_by_name("searchstring").send_keys(search_filter)
         # edit instance or exit (if there are no results)
         wd.find_element_by_xpath("//img[@title='Edit']").click()
-        # init first name
-        self.type_contract_property("firstname", contact.firstname)
-        self.type_contract_property("middlename", contact.middlename)
-        self.type_contract_property("lastname", contact.lastname)
+        self.fill_contact_info(contact)
         # save form
         wd.find_element_by_name("update").click()
         wd.find_element_by_link_text("home page").click()
