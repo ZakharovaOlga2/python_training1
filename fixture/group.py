@@ -46,13 +46,18 @@ class GroupHelper:
         self.return_to_elements_page("group page")
         self.header_menu_navigation("home")
 
-
     def return_to_elements_page(self, items):
         wd = self.app.wd
         wd.find_element_by_link_text(items).click()
 
     def header_menu_navigation(self, item):
         wd = self.app.wd
+        if item == 'groups':
+            if (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
+                return
+        if item == 'home':
+            if (len(wd.find_elements_by_id("search_count")) > 0):
+                return
         wd.find_element_by_link_text(item).click()
 
     def count(self):

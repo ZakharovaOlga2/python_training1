@@ -89,6 +89,12 @@ class ContactHelper:
 
     def header_menu_navigation(self, item):
         wd = self.app.wd
+        if item == 'add new':
+            if len(wd.find_elements_by_xpath("//input[@type='submit' and @value='Enter']")) > 0:
+                return
+        if item == 'home':
+            if (len(wd.find_elements_by_id("search_count")) > 0):
+                return
         wd.find_element_by_link_text(item).click()
 
     def close_alert_and_get_its_text(self):
