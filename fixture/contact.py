@@ -34,9 +34,7 @@ class ContactHelper:
         wd.find_element_by_name("searchstring").click()
         wd.find_element_by_name("searchstring").send_keys(search_filter)
         # count visible filtered values
-        cnt_all = len(wd.find_elements_by_xpath("//img[@title='Edit']"))
-        cnt_invisible = len(wd.find_elements_by_xpath("//tr[contains(@style,'display: none')]//img[@title='Edit']"))
-        cnt_visible = cnt_all - cnt_invisible
+        cnt_visible = self.count_visible_element(wd)
         # clear filter to next works
         wd.find_element_by_name("searchstring").click()
         wd.find_element_by_name("searchstring").clear()
@@ -70,11 +68,19 @@ class ContactHelper:
         wd.find_element_by_name("searchstring").click()
         wd.find_element_by_name("searchstring").send_keys(search_filter)
         # edit instance or exit (if there are no results)
-        wd.find_element_by_xpath("//img[@title='Edit']").click()
-        self.fill_contact_info(contact)
+        cnt_visible = self.count_visible_element(wd)
+        if cnt_visible > 0:
+            wd.find_element_by_xpath("//tr[not(contains(@style,'display: none'))]//img[@title='Edit']").click()
+            self.fill_contact_info(contact)
+            wd.find_element_by_name("update").click()
         # save form
-        wd.find_element_by_name("update").click()
         wd.find_element_by_link_text("home page").click()
+
+    def count_visible_element(self, wd):
+        cnt_all = len(wd.find_elements_by_xpath("//img[@title='Edit']"))
+        cnt_invisible = len(wd.find_elements_by_xpath("//tr[contains(@style,'display: none')]//img[@title='Edit']"))
+        cnt_visible = cnt_all - cnt_invisible
+        return cnt_visible
 
     def delete_first_contact(self):
         wd = self.app.wd
