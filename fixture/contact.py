@@ -1,4 +1,5 @@
 from selenium.webdriver.common.keys import Keys
+from model.contact import Contact
 
 class ContactHelper:
 
@@ -120,3 +121,23 @@ class ContactHelper:
         self.header_menu_navigation("home")
         return len(wd.find_elements_by_name("selected[]"))
 
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.header_menu_navigation("home")
+        contacts = []
+        # wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']"):
+        for element in wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']//input"):
+            full_name = element.get_attribute("title")[8:-1]
+            split = full_name.split()
+            if len(split)==1 and full_name[0]==" ":
+                lastname = split[0]
+                firstname = ""
+            elif len(split)==1:
+                firstname = split[0]
+                lastname=""
+            else:
+                lastname = split[1]
+                firstname = split[0]
+            id = element.get_attribute("id")
+            contacts.append(Contact(firstname=firstname,lastname=lastname,id=id))
+        return contacts
