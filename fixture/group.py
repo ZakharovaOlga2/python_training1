@@ -20,6 +20,7 @@ class GroupHelper:
         self.fill_group_info(group)
         wd.find_element_by_name("submit").click()
         self.return_to_elements_page("group page")
+        self.group_cache = None
 
     def fill_group_info(self, group):
         self.type_group_property("group_name", group.name)
@@ -35,6 +36,7 @@ class GroupHelper:
         wd.find_element_by_name("delete").click()
         #return
         self.return_to_elements_page("group page")
+        self.group_cache = None
 
     def modify(self, search_filter, group):
         wd = self.app.wd
@@ -47,6 +49,7 @@ class GroupHelper:
         wd.find_element_by_name("update").click()
         self.return_to_elements_page("group page")
         self.header_menu_navigation("home")
+        self.group_cache = None
 
     def return_to_elements_page(self, items):
         wd = self.app.wd
@@ -75,12 +78,16 @@ class GroupHelper:
             return True
         return False
 
+    group_cache = None
+
     def get_group_list(self):
-        wd = self.app.wd
-        self.header_menu_navigation("groups")
-        groups = []
-        for element in wd.find_elements_by_css_selector("span.group"):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            groups.append(Group(name=text,id=id))
-        return groups
+        if self.group_cache == None:
+            wd = self.app.wd
+            self.header_menu_navigation("groups")
+            self.group_cache = []
+            for element in wd.find_elements_by_css_selector("span.group"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text,id=id))
+
+        return list(self.group_cache)

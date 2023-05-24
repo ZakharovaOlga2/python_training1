@@ -27,6 +27,7 @@ class ContactHelper:
         wd.find_element_by_name("theform").click()
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         wd.find_element_by_link_text("home page").click()
+        self.contact_cache = None
 
     def exists(self, search_filter):
         wd = self.app.wd
@@ -76,6 +77,7 @@ class ContactHelper:
             wd.find_element_by_name("update").click()
         # save form
         wd.find_element_by_link_text("home page").click()
+        self.contact_cache = None
 
     def count_visible_element(self, wd):
         cnt_all = len(wd.find_elements_by_xpath("//img[@title='Edit']"))
@@ -93,6 +95,7 @@ class ContactHelper:
         # return
         alert = wd.switch_to_alert()
         alert.accept()
+        self.contact_cache = None
 
     def header_menu_navigation(self, item):
         wd = self.app.wd
@@ -121,23 +124,26 @@ class ContactHelper:
         self.header_menu_navigation("home")
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.header_menu_navigation("home")
-        contacts = []
-        # wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']"):
-        for element in wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']//input"):
-            full_name = element.get_attribute("title")[8:-1]
-            split = full_name.split()
-            if len(split)==1 and full_name[0]==" ":
-                lastname = split[0]
-                firstname = ""
-            elif len(split)==1:
-                firstname = split[0]
-                lastname=""
-            else:
-                lastname = split[1]
-                firstname = split[0]
-            id = element.get_attribute("id")
-            contacts.append(Contact(firstname=firstname,lastname=lastname,id=id))
-        return contacts
+        if self.contact_cache == None:
+            wd = self.app.wd
+            self.header_menu_navigation("home")
+            self.contact_cache = []
+            # wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']"):
+            for element in wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none')) and @name='entry']//input"):
+                full_name = element.get_attribute("title")[8:-1]
+                split = full_name.split()
+                if len(split)==1 and full_name[0]==" ":
+                    lastname = split[0]
+                    firstname = ""
+                elif len(split)==1:
+                    firstname = split[0]
+                    lastname=""
+                else:
+                    lastname = split[1]
+                    firstname = split[0]
+                id = element.get_attribute("id")
+                self.contact_cache.append(Contact(firstname=firstname,lastname=lastname,id=id))
+        return self.contact_cache
