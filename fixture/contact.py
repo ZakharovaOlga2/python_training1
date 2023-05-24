@@ -64,6 +64,9 @@ class ContactHelper:
         self.type_contract_property("byear", contact.byear)
 
     def modify(self, search_filter, contact):
+        self.modify_by_index(search_filter, contact,0)
+
+    def modify_by_index(self, search_filter, contact,index):
         wd = self.app.wd
         self.header_menu_navigation("home")
         # filter
@@ -72,7 +75,7 @@ class ContactHelper:
         # edit instance or exit (if there are no results)
         cnt_visible = self.count_visible_element(wd)
         if cnt_visible > 0:
-            wd.find_element_by_xpath("//tr[not(contains(@style,'display: none'))]//img[@title='Edit']").click()
+            wd.find_elements_by_xpath("//tr[not(contains(@style,'display: none'))]//img[@title='Edit']")[index].click()
             self.fill_contact_info(contact)
             wd.find_element_by_name("update").click()
         # save form
@@ -86,10 +89,13 @@ class ContactHelper:
         return cnt_visible
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self,index):
         wd = self.app.wd
         self.header_menu_navigation("home")
         # select first group
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # return

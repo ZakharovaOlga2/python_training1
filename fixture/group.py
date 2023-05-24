@@ -28,10 +28,13 @@ class GroupHelper:
         self.type_group_property("group_footer", group.footer)
 
     def delete_first_group(self):
+        self.delete_group_by_index(0)
+
+    def delete_group_by_index(self,index):
         wd = self.app.wd
         self.header_menu_navigation("groups")
         # select first group
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         #submit deletion
         wd.find_element_by_name("delete").click()
         #return
@@ -39,10 +42,13 @@ class GroupHelper:
         self.group_cache = None
 
     def modify(self, search_filter, group):
+        self.modify_group_by_index(search_filter, group, 0)
+
+    def modify_group_by_index(self, search_filter, group, index):
         wd = self.app.wd
         self.header_menu_navigation("groups")
         # edit instance or exit (if there are no results)
-        wd.find_element_by_xpath(f"//input[@type='checkbox' and @title='Select ({search_filter})']").click()
+        wd.find_elements_by_xpath(f"//input[@type='checkbox' and @title='Select ({search_filter})']")[index].click()
         wd.find_element_by_name("edit").click()
         self.fill_group_info(group)
         # submit
