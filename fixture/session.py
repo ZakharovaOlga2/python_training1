@@ -3,9 +3,9 @@ class SessionHelper:
     def __init__(self, app):
         self.app = app
 
-    def login(self, login, password):
+    def login(self, login, password,base_url):
         wd = self.app.wd
-        self.app.open_home_page("http://localhost/addressbook/")
+        self.app.open_home_page(base_url)
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(login)
         wd.find_element_by_name("pass").click()
@@ -33,11 +33,11 @@ class SessionHelper:
         wd = self.app.wd
         return wd.find_element_by_xpath("//div/div[1]/form/b").text[1:-1]
 
-    def ensure_login(self, username, password):
+    def ensure_login(self, username, password,base_url):
         wd = self.app.wd
         if self.is_logged_in():
             if self.is_logged_in_as(username):
                 return
             else:
                 self.logout()
-        self.login(username,password)
+        self.login(username,password,base_url)
