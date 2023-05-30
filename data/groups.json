@@ -1,7 +1,7 @@
 [
   {
     "py/object": "model.group.Group",
-    "name": "nameI\\}P",
+    "name": "nameI}P",
     "header": "head!O",
     "footer": "footunE,9F]",
     "id": null
@@ -22,7 +22,7 @@
   },
   {
     "py/object": "model.group.Group",
-    "name": "name&b ",
+    "name": "name&b",
     "header": "heads?f",
     "footer": "foot@I`o1a",
     "id": null

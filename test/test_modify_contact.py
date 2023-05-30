@@ -2,12 +2,12 @@
 from model.contact import Contact
 from random import randrange
 
-def test_modify_contact_py(app):
+def test_modify_contact_py(app, db, check_ui):
     new_fname="Sergey"
     contact = Contact(firstname=new_fname, middlename="Semenovich", lastname="Ivanov")
     if not app.contact.exists("Ivanov"):
         app.contact.create(contact)
-    old_contacts = app.contact.get_contact_list()
+    old_contacts = db.get_contact_list()
     index = 0
     for element in old_contacts:
         if element.lastname == "Ivanov":
@@ -16,17 +16,19 @@ def test_modify_contact_py(app):
         else:
             index = index + 1
     app.contact.modify("Ivanov", contact)
-    new_contacts = app.contact.get_contact_list()
+    new_contacts = db.get_contact_list()
     assert len(old_contacts) == len(new_contacts)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+    if check_ui:
+        assert new_contacts==sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
 
 
-def test_modify_some_contact(app):
+def test_modify_some_contact(app, db, check_ui):
     new_fname = "Sergey"
     contact = Contact(firstname=new_fname, middlename="Semenovich", lastname="Ivanov")
     if not app.contact.exists("Ivanov"):
         app.contact.create(contact)
-    old_contacts = app.contact.get_contact_list()
+    old_contacts = db.get_contact_list()
     rand_index_max = 0
     # из чего будем выбирать (после фильтрации)
     for element in old_contacts:
@@ -45,9 +47,11 @@ def test_modify_some_contact(app):
         index = index + 1
 
     app.contact.modify_by_index("Ivanov", contact, rand_index)
-    new_contacts = app.contact.get_contact_list()
+    new_contacts = db.get_contact_list()
     assert len(old_contacts) == len(new_contacts)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+    if check_ui:
+        assert new_contacts==sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
 
 
 
