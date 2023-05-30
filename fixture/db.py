@@ -36,6 +36,18 @@ class DBFixture:
             cursor.close()
         return list
 
+    def get_contact_list_without_groups(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("Select id,firstname,lastname from addressbook adr where deprecated='0000-00-00 00:00:00' and not exists(select * from address_in_groups gr where gr.id=adr.id);")
+            for row in cursor:
+                (id, firstname, lastname) = row
+                list.append(Contact(id=str(id), firstname=firstname, lastname=lastname))
+        finally:
+            cursor.close()
+        return list
+
     def destroy(self):
         self.connection.close()
 
