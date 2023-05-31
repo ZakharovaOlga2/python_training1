@@ -102,7 +102,7 @@ class ContactHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         # return
-        alert = wd.switch_to_alert()
+        alert = wd.switch_to.alert
         alert.accept()
         self.contact_cache = None
 

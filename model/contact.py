@@ -29,10 +29,19 @@ class Contact:
         return "%s:%s %s"% (self.id, self.firstname, self.lastname)
 
     def __eq__(self, other):
-        return (self.id is None or other.id is None or self.id == other.id) and self.firstname == other.firstname and self.lastname == other.lastname
+        return (self.id is None or other.id is None or self.id == other.id) and self.compare_with_None_values(self.firstname, other.firstname) and self.compare_with_None_values(self.lastname,other.lastname)
 
     def id_or_max(self):
         if self.id:
             return int(self.id)
         else:
             return maxsize
+
+    def compare_with_None_values(self,value1,value2):
+        if value1 == value2:
+            return True
+        if value1 is None and value2 == "":
+            return True
+        if value2 is None and value1 == "":
+            return True
+        return False
