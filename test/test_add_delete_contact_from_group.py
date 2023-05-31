@@ -20,7 +20,7 @@ def test_add_contact_to_group(app,db, orm):
     old_list.append(added_contact)
     app.contact.add_contact_to_group(added_contact.id, found_group_index)
     new_list = orm.get_contacts_in_group(Group(id=found_group_index))
-    assert new_list==sorted(old_list, key=Contact.id_or_max)
+    assert sorted(new_list,  key=Contact.id_or_max) == sorted(old_list, key=Contact.id_or_max)
 
 def test_delete_contact_from_group(app,db, orm):
     # проверка что группы существуют
