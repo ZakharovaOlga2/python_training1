@@ -2,6 +2,7 @@ from selenium import webdriver
 from fixture.session import SessionHelper
 from fixture.group import GroupHelper
 from fixture.contact import ContactHelper
+from webdriver_manager.chrome import ChromeDriverManager
 
 class Application:
 
@@ -9,7 +10,7 @@ class Application:
         if browser == "firefox":
             self.wd = webdriver.Firefox()
         elif browser == "chrome":
-            self.wd = webdriver.Chrome()
+            self.wd = webdriver.Chrome(ChromeDriverManager().install())
         elif browser == "ie":
             self.wd = webdriver.Ie()
         else:
